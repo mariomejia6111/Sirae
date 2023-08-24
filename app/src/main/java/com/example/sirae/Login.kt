@@ -17,6 +17,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
+        if (supportActionBar != null) supportActionBar?.hide()
         // Declarar el botón con el ID "btn_google"
         val btnGoogle = findViewById<Button>(R.id.btn_google)
 
@@ -29,6 +30,7 @@ class Login : AppCompatActivity() {
         // Configurar el escucha de clics del botón
         btnGoogle.setOnClickListener {
             signInWithGoogle()
+            //goToMainActivity()
         }
     }
 
@@ -66,12 +68,12 @@ class Login : AppCompatActivity() {
     }
 
     private fun goToMainActivity() {
-       // val intent = Intent(this, MainActivity::class.java)
+       val intent = Intent(this, home::class.java)
 
         // Puedes pasar datos adicionales a MainActivity si lo deseas
-        // intent.putExtra("email", email)
+        //intent.putExtra("email", email)
 
-        ///startActivity(intent)
+        startActivity(intent)
 
         // Finalizar esta actividad para que el usuario no pueda regresar a la pantalla de inicio de sesión con el botón "Atrás"
         finish()
