@@ -1,70 +1,41 @@
 {
   "project_info": {
-    "project_number": "311331563743",
-    "project_id": "sirae-d43cd",
-    "storage_bucket": "sirae-d43cd.appspot.com"
+    "project_number": "653056598865",
+    "project_id": "sirae-d1406",
+    "storage_bucket": "sirae-d1406.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311331563743:android:bd14154deb0794793ca16a",
-        "android_client_info": {
-          "package_name": "com.example.myapplication"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "311331563743-opgrncjeg7d7l1n2emil37ojhah9jk1v.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.myapplication",
-            "certificate_hash": "83d364d74ad5c58085c364ff926cc142c020bf17"
-          }
-        },
-        {
-          "client_id": "311331563743-r6r52bjeloi065vmqq8k3re3dc304kvi.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBR7BdaCUVm9VkYS9LurfrGeByJ3ecPbbo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "311331563743-r14vh0ul1vr2sk4b369htni4ritn846q.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:311331563743:android:1bf7471af0fd26173ca16a",
+        "mobilesdk_app_id": "1:653056598865:android:95dda6516fcdd8299d2970",
         "android_client_info": {
           "package_name": "com.example.sirae"
         }
       },
       "oauth_client": [
         {
-          "client_id": "311331563743-r6r52bjeloi065vmqq8k3re3dc304kvi.apps.googleusercontent.com",
+          "client_id": "653056598865-6k4n4ejk6h3mhi851vdjqdafb07hv49i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sirae",
+            "certificate_hash": "83d364d74ad5c58085c364ff926cc142c020bf17"
+          }
+        },
+        {
+          "client_id": "653056598865-vdkj88l90fgsk81tsem7ilcf84i94605.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBR7BdaCUVm9VkYS9LurfrGeByJ3ecPbbo"
+          "current_key": "AIzaSyBgCeYhq-xaI0Nx-JhWdKE2Z3ucf94g0jI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "311331563743-r14vh0ul1vr2sk4b369htni4ritn846q.apps.googleusercontent.com",
+              "client_id": "653056598865-vdkj88l90fgsk81tsem7ilcf84i94605.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
