@@ -11,20 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sirae"
-        tools:targetApi="31">
-        <activity
-            android:name=".programacion_visita"
-            android:exported="false" />
-        <activity
-            android:name=".datos_asistencia_tecnica"
-            android:exported="false" />
-        <activity
-            android:name=".home"
-            android:exported="false" />
+        tools:targetApi="31"
+        >
         <activity
             android:name=".Login"
-            android:exported="true"
-            android:label="Nombre de tu Actividad">
+            android:label="Nombre de tu Actividad"
+
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,5 +25,7 @@
             </intent-filter>
         </activity>
     </application>
+
+
 
 </manifest>
