@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToWelcomeActivity(email: String?) {
-        val intent = Intent(this, WelcomeActivity::class.java)
+        val intent = Intent(this, home::class.java)
         intent.putExtra("email", email)
         startActivity(intent)
         finish()
