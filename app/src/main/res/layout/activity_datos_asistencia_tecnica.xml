@@ -30,7 +30,7 @@
             android:backgroundTint="@color/purple_700"
             android:ems="10"
             android:focusable="false"
-            android:inputType="none"
+            android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
@@ -193,14 +193,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
-        <EditText
-            android:id="@+id/txt_municipio"
+        <Spinner
+            android:id="@+id/spinner_municipio"
             android:layout_width="350dp"
             android:layout_height="45dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
@@ -219,18 +217,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
-        <EditText
-            android:id="@+id/txt_departamento"
+        <Spinner
+            android:id="@+id/spinner_departamento"
             android:layout_width="350dp"
             android:layout_height="45dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
 
         <TextView
             android:id="@+id/textView23"
@@ -354,7 +351,7 @@
         <EditText
             android:id="@+id/Objetivo"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
             android:ems="10"
@@ -368,7 +365,7 @@
             android:id="@+id/textView28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="120dp"
             android:text="Hallazgos"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -380,8 +377,9 @@
         <EditText
             android:id="@+id/txt_hallazgos"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="100dp"
             android:layout_marginTop="8dp"
+
             android:backgroundTint="@color/purple_700"
             android:ems="10"
             android:inputType="text"
@@ -394,7 +392,7 @@
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="120dp"
             android:text="Recomendaciones"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -406,7 +404,7 @@
         <EditText
             android:id="@+id/txt_recomendaciones"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
             android:ems="10"
@@ -420,7 +418,7 @@
             android:id="@+id/textView30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="120dp"
             android:text="Acuerdos"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -432,7 +430,7 @@
         <EditText
             android:id="@+id/txt_acuerdos"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
             android:ems="10"
@@ -441,6 +439,8 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

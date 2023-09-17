@@ -1,11 +1,14 @@
 package com.example.sirae
 import DatabaseHandler
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sirae.R
@@ -19,8 +22,6 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     private lateinit var txtLugar: EditText
     private lateinit var txtActividad: EditText
     private lateinit var txtCodigoDistrito: EditText
-    private lateinit var txtMunicipio: EditText
-    private lateinit var txtDepartamento: EditText
     private lateinit var txtHora: EditText
     private lateinit var txtParticipantes: EditText
     private lateinit var txtParticipantesMujeres: EditText
@@ -30,7 +31,10 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     private lateinit var txtRecomendaciones: EditText
     private lateinit var txtAcuerdos: EditText
     private lateinit var btnEnviar: Button
+    private lateinit var spinnerDepartamento : Spinner
+    private lateinit var spinnerMunicipio : Spinner
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datos_asistencia_tecnica)
@@ -41,8 +45,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         txtLugar = findViewById(R.id.txt_lugar)
         txtActividad = findViewById(R.id.txt_actividad)
         txtCodigoDistrito = findViewById(R.id.txt_codigodistrito)
-        txtMunicipio = findViewById(R.id.txt_municipio)
-        txtDepartamento = findViewById(R.id.txt_departamento)
+        spinnerMunicipio = findViewById(R.id.spinner_municipio)
+        spinnerDepartamento = findViewById(R.id.spinner_departamento)
         txtHora = findViewById(R.id.txt_hora)
         txtParticipantes = findViewById(R.id.txt_participantes)
         txtParticipantesMujeres = findViewById(R.id.Participantes_M)
@@ -52,6 +56,40 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         txtRecomendaciones = findViewById(R.id.txt_recomendaciones)
         txtAcuerdos = findViewById(R.id.txt_acuerdos)
         btnEnviar = findViewById(R.id.btn_enviarSQlite)
+
+
+        val departamentosCabanias = arrayOf(
+            "Ahuachapán",
+            "Cabañas",
+            "Chalatenango",
+            "Cuscatlán",
+            "La Libertad",
+            "La Paz",
+            "La Unión",
+            "Morazán",
+            "San Miguel",
+            "San Salvador",
+            "San Vicente",
+            "Santa Ana",
+            "Sonsonate",
+            "Usulután"
+        )
+
+
+        // Crear un adaptador para el Spinner
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, departamentosCabanias)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerDepartamento.adapter = adapter
+
+        val municipiosCabanias = arrayOf(
+            "Cinquera", "Dolores", "Guacotecti", "Ilobasco", "Jutiapa",
+            "San Isidro", "Sensuntepeque", "Tejutepeque", "Victoria"
+        )
+
+        // Crear un adaptador para el Spinner
+        val adapter1 = ArrayAdapter(this, android.R.layout.simple_spinner_item, municipiosCabanias)
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerMunicipio.adapter = adapter1
 
         // Configurar clic en el EditText de fecha
         txtFecha.setOnClickListener {
@@ -66,6 +104,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         // Configurar clic en el botón "Enviar"
         btnEnviar.setOnClickListener {
             guardarDatos()
+
+
         }
 
     }
@@ -104,8 +144,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         val lugar = txtLugar.text.toString()
         val actividad = txtActividad.text.toString()
         val codigoDistrito = txtCodigoDistrito.text.toString()
-        val municipio = txtMunicipio.text.toString()
-        val departamento = txtDepartamento.text.toString()
+        val municipio = spinnerMunicipio.selectedItem.toString()
+        val departamento = spinnerDepartamento.selectedItem.toString()
         val hora = txtHora.text.toString()
         val participantes = txtParticipantes.text.toString()
         val participantesMujeres = txtParticipantesMujeres.text.toString()
