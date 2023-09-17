@@ -14,13 +14,13 @@
             android:id="@+id/btn_enviarSQlite"
             android:layout_width="175dp"
             android:layout_height="50dp"
-            android:layout_marginTop="1750dp"
+            android:layout_marginTop="20dp"
             android:backgroundTint="#3a318c"
             android:text="Enviar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Participantes_H"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_acuerdos" />
 
         <EditText
             android:id="@+id/txt_fecha"
@@ -29,12 +29,12 @@
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
             android:ems="10"
+            android:focusable="false"
             android:inputType="none"
-        android:focusable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
         <TextView
             android:id="@+id/textView19"
@@ -179,6 +179,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
         <TextView
             android:id="@+id/textView21"
             android:layout_width="wrap_content"
@@ -191,6 +192,7 @@
             app:layout_constraintHorizontal_bias="0.082"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
         <EditText
             android:id="@+id/txt_municipio"
             android:layout_width="350dp"
@@ -209,7 +211,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="68dp"
-            android:text="departamento:"
+            android:text="Departamento:"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -229,6 +231,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
         <TextView
             android:id="@+id/textView23"
             android:layout_width="wrap_content"
@@ -241,6 +244,7 @@
             app:layout_constraintHorizontal_bias="0.082"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
         <EditText
             android:id="@+id/txt_hora"
             android:layout_width="350dp"
@@ -248,12 +252,12 @@
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/purple_700"
             android:ems="10"
+            android:focusable="false"
             android:inputType="none"
-        android:focusable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
 
         <TextView
@@ -359,6 +363,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
         <TextView
             android:id="@+id/textView28"
             android:layout_width="wrap_content"
@@ -384,6 +389,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
         <TextView
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
@@ -409,6 +415,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
         <TextView
             android:id="@+id/textView30"
             android:layout_width="wrap_content"
@@ -434,7 +441,7 @@
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
-        
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
