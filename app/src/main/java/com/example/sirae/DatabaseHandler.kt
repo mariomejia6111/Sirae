@@ -1,7 +1,9 @@
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.sirae.AsistenciaTecnicaModel
 import java.io.File
 
 class DatabaseHandler(context: Context) :
@@ -105,9 +107,56 @@ class DatabaseHandler(context: Context) :
         return result
     }
 
+
     // Método para abrir la base de datos
     fun open() {
         this.writableDatabase
     }
+    // Método para obtener todos los datos de la tabla asistencia_tecnica
+    @SuppressLint("Range")
+    fun obtenerTodosLosDatos(): List<AsistenciaTecnicaModel> {
+        val dataList = mutableListOf<AsistenciaTecnicaModel>()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_ASISTENCIA_TECNICA"
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                val id = cursor.getLong(cursor.getColumnIndex(KEY_ID))
+                val fecha = cursor.getString(cursor.getColumnIndex(KEY_FECHA))
+                val distrito = cursor.getString(cursor.getColumnIndex(KEY_DISTRITO))
+                val lugar = cursor.getString(cursor.getColumnIndex(KEY_LUGAR))
+                val actividad = cursor.getString(cursor.getColumnIndex(KEY_ACTIVIDAD))
+                val codigoDistrito = cursor.getString(cursor.getColumnIndex(KEY_CODIGO_DISTRITO))
+                val municipio = cursor.getString(cursor.getColumnIndex(KEY_MUNICIPIO))
+                val departamento = cursor.getString(cursor.getColumnIndex(KEY_DEPARTAMENTO))
+                val hora = cursor.getString(cursor.getColumnIndex(KEY_HORA))
+                val participantes = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES))
+                val participantesMujeres = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES_MUJERES))
+                val participantesHombres = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES_HOMBRES))
+                val objetivo = cursor.getString(cursor.getColumnIndex(KEY_OBJETIVO))
+                val hallazgos = cursor.getString(cursor.getColumnIndex(KEY_HALLAZGOS))
+                val recomendaciones = cursor.getString(cursor.getColumnIndex(KEY_RECOMENDACIONES))
+                val acuerdos = cursor.getString(cursor.getColumnIndex(KEY_ACUERDOS))
+
+                // Crea un objeto AsistenciaTecnicaModel con los datos
+                val asistenciaTecnica = AsistenciaTecnicaModel(
+                    id, fecha, distrito, lugar, actividad, codigoDistrito,
+                    municipio, departamento, hora, participantes, participantesMujeres,
+                    participantesHombres, objetivo, hallazgos, recomendaciones, acuerdos
+                )
+
+                // Agrega el objeto a la lista
+                dataList.add(asistenciaTecnica)
+            } while (cursor.moveToNext())
+        }
+
+        cursor?.close()
+        db.close()
+
+        return dataList
+    }
+
+
 }
 
