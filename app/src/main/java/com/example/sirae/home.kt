@@ -1,14 +1,14 @@
 package com.example.sirae
-
 import DatabaseHandler
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Secure
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -19,7 +19,7 @@ class home : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var dbHandler: DatabaseHandler
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
@@ -29,6 +29,8 @@ class home : AppCompatActivity() {
         val btn_firebase = findViewById<ImageView>(R.id.btn_firebase)
 
         val email = intent.getStringExtra("email")
+        val installationId = obtenerIDUnico(this)
+
         val welcomeMessage = "Hola, bienvenido!"
         val welcomeText = findViewById<TextView>(R.id.welcome_text)
         welcomeText.text = "$welcomeMessage\nCorreo: $email"
@@ -40,50 +42,64 @@ class home : AppCompatActivity() {
         }
 
         btn_firebase.setOnClickListener {
-            obtenerYSubirDatosAFirebase()
+            obtenerYSubirDatosAFirebase(email, installationId)
         }
     }
 
-    private fun obtenerYSubirDatosAFirebase() {
-        // Obtén los datos de la base de datos SQLite
-        val datosSQLite = dbHandler.obtenerTodosLosDatos()
+    private fun obtenerYSubirDatosAFirebase(email: String?, installationId: String) {
+        if (!email.isNullOrEmpty() && installationId.isNotEmpty()) {
+            // Reemplaza los puntos en el correo electrónico con guiones bajos
+            val emailSinPunto = email.replace(".", "_")
 
-        // Aquí debes reemplazar "nombre_de_tu_nodo" con el nombre de tu nodo en Firebase
-        val referenciaFirebase = FirebaseDatabase.getInstance().getReference("registros_asistencia")
+            // Usa la parte antes de "@" como parte de la ruta en Firebase
+            val emailSinArroba = emailSinPunto.substringBefore("@")
+            val nodoFirebase = "${emailSinArroba}/$installationId"
 
-        // Crea un mapa para realizar un seguimiento de los IDs que se han subido
-        val idsSubidos = mutableMapOf<Long, Boolean>()
+            // Obtén los datos de la base de datos SQLite
+            val datosSQLite = dbHandler.obtenerTodosLosDatos()
 
-        // Obtén los registros existentes en Firebase para evitar duplicados
-        referenciaFirebase.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (registro in snapshot.children) {
-                    val id = registro.child("id").value as Long
-                    idsSubidos[id] = true
-                }
+            // Referencia al nodo en Firebase
+            val referenciaFirebase = FirebaseDatabase.getInstance().getReference(nodoFirebase)
 
-                // Itera sobre los datos y súbelos a Firebase si el ID no existe
-                for (dato in datosSQLite) {
-                    if (!idsSubidos.containsKey(dato.id)) {
-                        // Crea una clave única en Firebase (puedes usar push() o un ID específico)
-                        val nuevaClave = referenciaFirebase.push().key ?: "1"
+            // Crea un mapa para realizar un seguimiento de los IDs que se han subido
+            val idsSubidos = mutableMapOf<Long, Boolean>()
 
-                        // Sube el dato a Firebase usando la clave única
-                        referenciaFirebase.child(nuevaClave).setValue(dato)
+            // Obtén los registros existentes en Firebase para evitar duplicados
+            referenciaFirebase.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (registro in snapshot.children) {
+                        val id = registro.child("id").value as Long
+                        idsSubidos[id] = true
                     }
+
+                    // Itera sobre los datos y súbelos a Firebase si el ID no existe
+                    for (dato in datosSQLite) {
+                        if (!idsSubidos.containsKey(dato.id)) {
+                            // Crea una clave única en Firebase (puedes usar push() o un ID específico)
+                            val nuevaClave = referenciaFirebase.push().key ?: "0"
+
+                            // Sube el dato a Firebase usando la clave única
+                            referenciaFirebase.child(nuevaClave).setValue(dato)
+                        }
+                    }
+
+                    // Notifica al usuario que los datos se subieron con éxito
+                    Toast.makeText(this@home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
                 }
 
-                // Notifica al usuario que los datos se subieron con éxito
-                Toast.makeText(this@home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Manejar el error si es necesario
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Manejar el error si es necesario
+                }
+            })
+        } else {
+            // Manejar el caso en el que el correo o el identificador no sean válidos
+            Toast.makeText(this, "Correo o identificador inválido", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
-
+    private fun obtenerIDUnico(context: Context): String {
+        return Secure.getString(context.contentResolver, Secure.ANDROID_ID)
+    }
 
 }

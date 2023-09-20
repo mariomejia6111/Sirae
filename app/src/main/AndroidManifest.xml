@@ -28,5 +28,6 @@
         <activity android:name=".home" />
         <activity android:name=".datos_asistencia_tecnica" />
 
+
     </application>
 </manifest>
