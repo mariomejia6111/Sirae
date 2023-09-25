@@ -202,8 +202,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+            app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
+
+        <Spinner
+            android:id="@+id/spinner_departamento"
+            android:layout_width="350dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/purple_700"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
         <TextView
             android:id="@+id/textView22"
             android:layout_width="wrap_content"
@@ -216,17 +227,6 @@
             app:layout_constraintHorizontal_bias="0.097"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView21" />
-
-        <Spinner
-            android:id="@+id/spinner_departamento"
-            android:layout_width="350dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/purple_700"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
 
         <TextView
@@ -350,16 +350,12 @@
 
         <EditText
             android:id="@+id/Objetivo"
-            android:layout_width="350dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            style="@style/EditTextForLongText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
 
         <TextView
             android:id="@+id/textView28"
@@ -376,13 +372,7 @@
 
         <EditText
             android:id="@+id/txt_hallazgos"
-            android:layout_width="350dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-
-            android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
+            style="@style/EditTextForLongText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
@@ -403,12 +393,7 @@
 
         <EditText
             android:id="@+id/txt_recomendaciones"
-            android:layout_width="350dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
+            style="@style/EditTextForLongText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
@@ -429,12 +414,7 @@
 
         <EditText
             android:id="@+id/txt_acuerdos"
-            android:layout_width="350dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/purple_700"
-            android:ems="10"
-            android:inputType="text"
+            style="@style/EditTextForLongText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"

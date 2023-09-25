@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -55,8 +57,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         txtAcuerdos = findViewById(R.id.txt_acuerdos)
         btnEnviar = findViewById(R.id.btn_enviarSQlite)
 
-
-        val departamentosCabanias = arrayOf(
+        val departamentosElSalvador = arrayOf(
             "Ahuachapán",
             "Cabañas",
             "Chalatenango",
@@ -72,22 +73,33 @@ class datos_asistencia_tecnica: AppCompatActivity() {
             "Sonsonate",
             "Usulután"
         )
+        // Crear un adaptador para el Spinner de departamentos
+        val adapterDepartamento = ArrayAdapter(this, android.R.layout.simple_spinner_item, departamentosElSalvador)
+        adapterDepartamento.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerDepartamento.adapter = adapterDepartamento
+
+// Establecer el Listener para el Spinner de departamentos
+        spinnerDepartamento.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
+                // Obtener el departamento seleccionado
+                val departamentoSeleccionado = departamentosElSalvador[position]
+
+                // Obtener los municipios correspondientes al departamento seleccionado
+                val municipiosCorrespondientes = MunicipioData.getMunicipios(departamentoSeleccionado)
+
+                // Crear un adaptador para el Spinner de municipios
+                val adapterMunicipio = ArrayAdapter(this@datos_asistencia_tecnica, android.R.layout.simple_spinner_item, municipiosCorrespondientes)
+                adapterMunicipio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerMunicipio.adapter = adapterMunicipio
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+                // Manejar el caso en que no se haya seleccionado nada
+            }
+        }
 
 
-        // Crear un adaptador para el Spinner
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, departamentosCabanias)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerDepartamento.adapter = adapter
 
-        val municipiosCabanias = arrayOf(
-            "Cinquera", "Dolores", "Guacotecti", "Ilobasco", "Jutiapa",
-            "San Isidro", "Sensuntepeque", "Tejutepeque", "Victoria"
-        )
-
-        // Crear un adaptador para el Spinner
-        val adapter1 = ArrayAdapter(this, android.R.layout.simple_spinner_item, municipiosCabanias)
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerMunicipio.adapter = adapter1
 
         // Configurar clic en el EditText de fecha
         txtFecha.setOnClickListener {
@@ -101,13 +113,32 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
         // Configurar clic en el botón "Enviar"
         btnEnviar.setOnClickListener {
-            guardarDatos()
-
-
+            // Verificar si todas las entradas están llenas antes de guardar los datos
+            if (verificarEntradasLlenas()) {
+                guardarDatos()
+            } else {
+                // Mostrar un mensaje de error si alguna entrada está vacía
+                Toast.makeText(this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
 
+    private fun verificarEntradasLlenas(): Boolean {
+        // Verificar cada entrada de texto para asegurarse de que no esté vacía
+        val todasLasEntradasLlenas = !(
+                txtFecha.text.isBlank() || txtDistrito.text.isBlank() || txtLugar.text.isBlank() ||
+                        txtActividad.text.isBlank() || txtCodigoDistrito.text.isBlank() ||
+                        txtHora.text.isBlank() || txtParticipantes.text.isBlank() ||
+                        txtParticipantesMujeres.text.isBlank() || txtParticipantesHombres.text.isBlank() ||
+                        txtObjetivo.text.isBlank() || txtHallazgos.text.isBlank() ||
+                        txtRecomendaciones.text.isBlank() || txtAcuerdos.text.isBlank() ||
+                        spinnerMunicipio.selectedItem.toString().isBlank() ||
+                        spinnerDepartamento.selectedItem.toString().isBlank()
+                )
+
+        return todasLasEntradasLlenas
+    }
     private fun mostrarDialogoFecha() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><style name="EditTextForLongText">
+    <item name="android:layout_width">350dp</item>
+    <item name="android:layout_height">100dp</item>
+    <item name="android:layout_marginTop">8dp</item>
+    <item name="android:backgroundTint">@color/purple_700</item>
+    <item name="android:ems">10</item>
+    <item name="android:inputType">textMultiLine</item> <!-- Permite múltiples líneas de texto -->
+    <item name="android:gravity">top|start</item> <!-- Alineación del texto en la parte superior y a la izquierda -->
+    <item name="android:scrollbars">vertical</item> <!-- Añade barras de desplazamiento vertical -->
+    <item name="android:padding">8dp</item> <!-- Espaciado interno -->
+</style>
+</resources>

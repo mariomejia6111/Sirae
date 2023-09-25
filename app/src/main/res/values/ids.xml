@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textView24" type="id" />
+    <item name="textView25" type="id" />
+    <item name="Participantes_M" type="id" />
+    <item name="textView26" type="id" />
+    <item name="Participantes_H" type="id" />
+    <item name="Objetivo" type="id" />
+    <item name="textView23" type="id" />
+    <item name="txt_participantes" type="id" />
+    <item name="txt_hora" type="id" />
+</resources>
