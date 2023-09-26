@@ -30,6 +30,7 @@ class DatabaseHandler(context: Context) :
         private const val KEY_PARTICIPANTES = "participantes"
         private const val KEY_PARTICIPANTES_MUJERES = "participantes_mujeres"
         private const val KEY_PARTICIPANTES_HOMBRES = "participantes_hombres"
+        private const val KEY_SUMA_PARTICIPANTES = "suma_participantes"
         private const val KEY_OBJETIVO = "objetivo"
         private const val KEY_HALLAZGOS = "hallazgos"
         private const val KEY_RECOMENDACIONES = "recomendaciones"
@@ -59,8 +60,9 @@ class DatabaseHandler(context: Context) :
                 "$KEY_DEPARTAMENTO TEXT," +
                 "$KEY_HORA TEXT," +
                 "$KEY_PARTICIPANTES TEXT," +
-                "$KEY_PARTICIPANTES_MUJERES TEXT," +
-                "$KEY_PARTICIPANTES_HOMBRES TEXT," +
+                "$KEY_PARTICIPANTES_MUJERES INTEGER," +
+                "$KEY_PARTICIPANTES_HOMBRES INTEGER," +
+                "$KEY_SUMA_PARTICIPANTES INTEGER," +
                 "$KEY_OBJETIVO TEXT," +
                 "$KEY_HALLAZGOS TEXT," +
                 "$KEY_RECOMENDACIONES TEXT," +
@@ -76,8 +78,8 @@ class DatabaseHandler(context: Context) :
     fun insertData(
         fecha: String, distrito: String, lugar: String, actividad: String,
         codigoDistrito: String, municipio: String, departamento: String,
-        hora: String, participantes: String, participantesMujeres: String,
-        participantesHombres: String, objetivo: String, hallazgos: String,
+        hora: String, participantes: String, participantesMujeres: Int,
+        participantesHombres: Int, sumaParticipantes : Int, objetivo: String, hallazgos: String,
         recomendaciones: String, acuerdos: String
     ): Long {
         val db = this.writableDatabase
@@ -93,6 +95,7 @@ class DatabaseHandler(context: Context) :
         values.put(KEY_PARTICIPANTES, participantes)
         values.put(KEY_PARTICIPANTES_MUJERES, participantesMujeres)
         values.put(KEY_PARTICIPANTES_HOMBRES, participantesHombres)
+        values.put(KEY_SUMA_PARTICIPANTES,sumaParticipantes)
         values.put(KEY_OBJETIVO, objetivo)
         values.put(KEY_HALLAZGOS, hallazgos)
         values.put(KEY_RECOMENDACIONES, recomendaciones)
@@ -132,8 +135,9 @@ class DatabaseHandler(context: Context) :
                 val departamento = cursor.getString(cursor.getColumnIndex(KEY_DEPARTAMENTO))
                 val hora = cursor.getString(cursor.getColumnIndex(KEY_HORA))
                 val participantes = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES))
-                val participantesMujeres = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES_MUJERES))
-                val participantesHombres = cursor.getString(cursor.getColumnIndex(KEY_PARTICIPANTES_HOMBRES))
+                val participantesMujeres = cursor.getInt(cursor.getColumnIndex(KEY_PARTICIPANTES_MUJERES))
+                val participantesHombres = cursor.getInt(cursor.getColumnIndex(KEY_PARTICIPANTES_HOMBRES))
+                val sumaParticipantes = cursor.getInt(cursor.getColumnIndex(KEY_SUMA_PARTICIPANTES))
                 val objetivo = cursor.getString(cursor.getColumnIndex(KEY_OBJETIVO))
                 val hallazgos = cursor.getString(cursor.getColumnIndex(KEY_HALLAZGOS))
                 val recomendaciones = cursor.getString(cursor.getColumnIndex(KEY_RECOMENDACIONES))
@@ -143,7 +147,7 @@ class DatabaseHandler(context: Context) :
                 val asistenciaTecnica = AsistenciaTecnicaModel(
                     id, fecha, distrito, lugar, actividad, codigoDistrito,
                     municipio, departamento, hora, participantes, participantesMujeres,
-                    participantesHombres, objetivo, hallazgos, recomendaciones, acuerdos
+                    participantesHombres, sumaParticipantes,objetivo, hallazgos, recomendaciones, acuerdos
                 )
 
                 // Agrega el objeto a la lista

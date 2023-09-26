@@ -177,8 +177,9 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         val departamento = spinnerDepartamento.selectedItem.toString()
         val hora = txtHora.text.toString()
         val participantes = txtParticipantes.text.toString()
-        val participantesMujeres = txtParticipantesMujeres.text.toString()
-        val participantesHombres = txtParticipantesHombres.text.toString()
+        val participantesMujeres = txtParticipantesMujeres.toString().toInt()
+        val participantesHombres = txtParticipantesHombres.text.toString().toInt()
+        val sumaParticipantes = participantesMujeres + participantesHombres
         val objetivo = txtObjetivo.text.toString()
         val hallazgos = txtHallazgos.text.toString()
         val recomendaciones = txtRecomendaciones.text.toString()
@@ -194,7 +195,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         val result = dbHandler.insertData(
             fecha, distrito, lugar, actividad, codigoDistrito, municipio, departamento,
             hora, participantes, participantesMujeres, participantesHombres,
-            objetivo, hallazgos, recomendaciones, acuerdos
+             sumaParticipantes,objetivo, hallazgos, recomendaciones, acuerdos
         )
 
         // Cierra la base de datos
