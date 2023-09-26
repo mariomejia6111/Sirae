@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.Secure
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -38,7 +39,6 @@ class home : AppCompatActivity() {
         btn_datos.setOnClickListener {
             val intent = Intent(this, datos_asistencia_tecnica::class.java)
             startActivity(intent)
-            finish()
         }
 
         btn_firebase.setOnClickListener {
@@ -61,6 +61,9 @@ class home : AppCompatActivity() {
             // Referencia al nodo en Firebase
             val referenciaFirebase = FirebaseDatabase.getInstance().getReference(nodoFirebase)
 
+            // Verifica si hay datos nuevos para subir
+            var hayDatosNuevos = false
+
             // Crea un mapa para realizar un seguimiento de los IDs que se han subido
             val idsSubidos = mutableMapOf<Long, Boolean>()
 
@@ -72,30 +75,49 @@ class home : AppCompatActivity() {
                         idsSubidos[id] = true
                     }
 
-                    // Itera sobre los datos y súbelos a Firebase si el ID no existe
+                    // Verifica si hay datos nuevos para subir
                     for (dato in datosSQLite) {
                         if (!idsSubidos.containsKey(dato.id)) {
-                            // Crea una clave única en Firebase (puedes usar push() o un ID específico)
-                            val nuevaClave = referenciaFirebase.push().key ?: "0"
-
-                            // Sube el dato a Firebase usando la clave única
-                            referenciaFirebase.child(nuevaClave).setValue(dato)
+                            hayDatosNuevos = true
+                            // No es necesario continuar verificando, ya sabemos que hay datos nuevos
+                            break
                         }
                     }
 
-                    // Notifica al usuario que los datos se subieron con éxito
-                    Toast.makeText(this@home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
+                    if (hayDatosNuevos) {
+                        // Si hay datos nuevos, sube los datos a Firebase
+                        for (dato in datosSQLite) {
+                            if (!idsSubidos.containsKey(dato.id)) {
+                                // Crea una clave única en Firebase (puedes usar push() o un ID específico)
+                                val nuevaClave = referenciaFirebase.push().key ?: "0"
+
+                                // Sube el dato a Firebase usando la clave única
+                                referenciaFirebase.child(nuevaClave).setValue(dato)
+                            }
+                        }
+
+                        // Notifica al usuario que los datos se subieron con éxito
+                        Toast.makeText(this@home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // No hay datos nuevos para subir, muestra un mensaje
+                        Toast.makeText(this@home, "No hay datos nuevos para subir", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Manejar el error si es necesario
+                    // Manejar el error aquí
+                    Log.e("FirebaseError", "Error en la lectura de Firebase: ${error.message}")
+                    Toast.makeText(this@home, "Error en la lectura de Firebase", Toast.LENGTH_SHORT).show()
                 }
+
             })
         } else {
-            // Manejar el caso en el que el correo o el identificador no sean válidos
+            // Manejar el caso en que el correo o el identificador no sean válidos
             Toast.makeText(this, "Correo o identificador inválido", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
 
     private fun obtenerIDUnico(context: Context): String {

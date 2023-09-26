@@ -177,7 +177,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         val departamento = spinnerDepartamento.selectedItem.toString()
         val hora = txtHora.text.toString()
         val participantes = txtParticipantes.text.toString()
-        val participantesMujeres = txtParticipantesMujeres.toString().toInt()
+        val participantesMujeres = txtParticipantesMujeres.text.toString().toInt()
         val participantesHombres = txtParticipantesHombres.text.toString().toInt()
         val sumaParticipantes = participantesMujeres + participantesHombres
         val objetivo = txtObjetivo.text.toString()
@@ -214,4 +214,5 @@ class datos_asistencia_tecnica: AppCompatActivity() {
             ).show()
         }
     }
+
 }
