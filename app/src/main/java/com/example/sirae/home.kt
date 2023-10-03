@@ -28,6 +28,7 @@ class home : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         val btn_datos = findViewById<ImageView>(R.id.ingresarDatosBt)
         val btn_firebase = findViewById<ImageView>(R.id.btn_firebase)
+        val progVisitaBt = findViewById<ImageView>(R.id.progVisitaBt)
 
         val email = intent.getStringExtra("email")
         val installationId = obtenerIDUnico(this)
@@ -38,6 +39,11 @@ class home : AppCompatActivity() {
 
         btn_datos.setOnClickListener {
             val intent = Intent(this, datos_asistencia_tecnica::class.java)
+            startActivity(intent)
+        }
+        progVisitaBt.setOnClickListener{
+            val intent = Intent(this,CalendarActivity::class.java)
+            intent.putExtra("email", email)
             startActivity(intent)
         }
 
