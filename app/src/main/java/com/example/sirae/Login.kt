@@ -16,11 +16,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import java.util.concurrent.TimeUnit
 
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import java.io.File
+import android.content.pm.PackageManager
+import android.os.Environment
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.element.Table
+import com.itextpdf.layout.property.HorizontalAlignment
+import com.itextpdf.layout.property.TextAlignment
+import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.layout.element.Cell
 
 class Login : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 9001
     private lateinit var sharedPreferences: SharedPreferences
+    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
 
     private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -58,6 +71,158 @@ class Login : AppCompatActivity() {
 
         btnGoogle.setOnClickListener {
             signInWithGoogle()
+        }
+
+        //Generacion de PDF
+        val generatedPDF: Button = findViewById(R.id.generatePdf)
+        generatedPDF.setOnClickListener {
+            createPdf()
+        }
+    }
+
+    private fun createPdf() {
+        try {
+            val pdfFileName = "example.pdf"
+            val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val pdfFilePath = File(storageDir, pdfFileName)
+
+            val writer = PdfWriter(pdfFilePath)
+            val pdf = PdfDocument(writer)
+            val document = Document(pdf)
+
+            // Add content to the PDF
+            val title = Paragraph("Application Form")
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontSize(18f)
+                .setBold()
+                .setMarginBottom(20f)
+
+            document.add(title)
+
+            // Create a table with 3 columns and 13 rows
+            val table = Table(floatArrayOf(1f, 1f, 1f))
+                .setHorizontalAlignment(HorizontalAlignment.CENTER)
+
+            table.addCell(Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Basic Information")))
+
+            table.addCell(Cell(2, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.WHITE)
+                .add(Paragraph("Activity\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.")))
+
+
+            table.addCell(Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Place: Some random place")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Code: 12345")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("District: Hot District")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("State: Hot State")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Department: Hot Department")))
+
+            table.addCell(Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Date: 01/01/2001")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Hour: 00:00")))
+
+            table.addCell(Cell(4, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Participants\n\n\n")))
+
+            table.addCell(Cell(1, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Participants Quantity")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Women: 000")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Men: 000")))
+
+            table.addCell(Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Total: 000")))
+
+            table.addCell(Cell(5, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Objectives\n\n\n\n")))
+
+            table.addCell(Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Happenings")))
+
+            table.addCell(Cell(1, 3)
+                .add(Paragraph("\n\n\n\n\n\n"))
+            )
+
+            table.addCell(Cell(6, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Recommendations\n\n\n\n\n")))
+
+            table.addCell(Cell(6, 1)
+                .add(Paragraph("Agreements\n\n\n\n\n"))
+            )
+
+            document.add(table)
+            // Close the document
+            document.close()
+
+            Toast.makeText(this, "PDF created successfully: $pdfFilePath", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, create the PDF
+                createPdf()
+            } else {
+                // Permission denied, show a message to the user
+                Toast.makeText(this, "Permission denied, cannot create PDF", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -55,4 +55,16 @@
         android:layout_marginEnd="20dp"
         android:text="Por favor inicie sesion con su cuenta" />
 
+    <Button
+        android:id="@+id/generatePdf"
+        android:layout_width="259dp"
+        android:layout_height="63dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="71dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="81dp"
+        android:text="Button" />
+
 </RelativeLayout>

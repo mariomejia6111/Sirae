@@ -50,7 +50,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth-api-phone:18.0.1")
     implementation ("com.google.firebase:firebase-database:20.2.2")
     implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha06")
-
+    implementation("com.itextpdf:itext7-core:7.1.15")
 
 
 
