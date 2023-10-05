@@ -16,6 +16,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import java.util.concurrent.TimeUnit
 
+import android.Manifest
+import androidx.core.app.ActivityCompat
+import android.os.Build
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
@@ -28,12 +31,18 @@ import com.itextpdf.layout.property.HorizontalAlignment
 import com.itextpdf.layout.property.TextAlignment
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.layout.element.Cell
+import java.text.SimpleDateFormat
+import java.util.Date
+import androidx.appcompat.app.AlertDialog
+import java.util.Locale
 
 class Login : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 9001
     private lateinit var sharedPreferences: SharedPreferences
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
+
+    private val FOLDER_NAME = "visitas"
 
     private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -76,140 +85,216 @@ class Login : AppCompatActivity() {
         //Generacion de PDF
         val generatedPDF: Button = findViewById(R.id.generatePdf)
         generatedPDF.setOnClickListener {
-            createPdf()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1001)
+                } else {
+                    createPdf()
+                }
+            } else {
+                createPdf()
+            }
         }
     }
 
     private fun createPdf() {
         try {
-            val pdfFileName = "example.pdf"
-            val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val pdfFilePath = File(storageDir, pdfFileName)
 
-            val writer = PdfWriter(pdfFilePath)
-            val pdf = PdfDocument(writer)
-            val document = Document(pdf)
+            val rootFolder = File(Environment.getExternalStorageDirectory(), FOLDER_NAME)
+            if (!rootFolder.exists()) {
+                rootFolder.mkdirs()
+            }
 
-            // Add content to the PDF
-            val title = Paragraph("Application Form")
-                .setTextAlignment(TextAlignment.CENTER)
-                .setFontSize(18f)
-                .setBold()
-                .setMarginBottom(20f)
+            val currentDate = Date()
+            val dateFormat = SimpleDateFormat("ddMMyyyy_HHmmss")
+            val formattedDate = dateFormat.format(currentDate)
+            val pdfFileName = "asistencia_tecnica_$formattedDate.pdf"
+            val pdfFilePath = File(rootFolder, pdfFileName)
 
-            document.add(title)
-
-            // Create a table with 3 columns and 13 rows
-            val table = Table(floatArrayOf(1f, 1f, 1f))
-                .setHorizontalAlignment(HorizontalAlignment.CENTER)
-
-            table.addCell(Cell(1, 3)
-                .setBold()
-                .setTextAlignment(TextAlignment.CENTER)
-                .setFontColor(ColorConstants.BLACK)
-                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-                .add(Paragraph("Basic Information")))
-
-            table.addCell(Cell(2, 3)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .setBackgroundColor(ColorConstants.WHITE)
-                .add(Paragraph("Activity\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.")))
-
-
-            table.addCell(Cell(1, 2)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Place: Some random place")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Code: 12345")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("District: Hot District")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("State: Hot State")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Department: Hot Department")))
-
-            table.addCell(Cell(1, 2)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Date: 01/01/2001")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Hour: 00:00")))
-
-            table.addCell(Cell(4, 3)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Participants\n\n\n")))
-
-            table.addCell(Cell(1, 3)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Participants Quantity")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Women: 000")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Men: 000")))
-
-            table.addCell(Cell(1, 1)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Total: 000")))
-
-            table.addCell(Cell(5, 3)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Objectives\n\n\n\n")))
-
-            table.addCell(Cell(1, 3)
-                .setBold()
-                .setTextAlignment(TextAlignment.CENTER)
-                .setFontColor(ColorConstants.BLACK)
-                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-                .add(Paragraph("Happenings")))
-
-            table.addCell(Cell(1, 3)
-                .add(Paragraph("\n\n\n\n\n\n"))
-            )
-
-            table.addCell(Cell(6, 2)
-                .setTextAlignment(TextAlignment.LEFT)
-                .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Recommendations\n\n\n\n\n")))
-
-            table.addCell(Cell(6, 1)
-                .add(Paragraph("Agreements\n\n\n\n\n"))
-            )
-
-            document.add(table)
-            // Close the document
-            document.close()
-
-            Toast.makeText(this, "PDF created successfully: $pdfFilePath", Toast.LENGTH_LONG).show()
+            if (pdfFilePath.exists()) {
+                AlertDialog.Builder(this)
+                    .setTitle("File Exists")
+                    .setMessage("Do you want to overwrite the existing file?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        saveFile(pdfFilePath)
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                        // Handle the case when the user chooses not to overwrite the file
+                        // You can generate a new file name based on the current time, for example:
+                        val timeStamp = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault()).format(Date())
+                        val newFileName = "asistencia_tecnica_${timeStamp}.pdf"
+                        val newFile = File(pdfFilePath.parentFile, newFileName)
+                        saveFile(newFile)
+                    }
+                    .setCancelable(false)
+                    .show()
+            } else {
+                saveFile(pdfFilePath)
+            }
         } catch (e: Exception) {
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun saveFile(file: File) {
+        val writer = PdfWriter(file)
+        val pdf = PdfDocument(writer)
+        val document = Document(pdf)
+
+        // Add content to the PDF
+        val title = Paragraph("Application Form")
+            .setTextAlignment(TextAlignment.CENTER)
+            .setFontSize(18f)
+            .setBold()
+            .setMarginBottom(20f)
+
+        document.add(title)
+
+        // Create a table with 3 columns and 13 rows
+        val table = Table(floatArrayOf(1f, 1f, 1f))
+            .setHorizontalAlignment(HorizontalAlignment.CENTER)
+
+        table.addCell(
+            Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Basic Information"))
+        )
+
+        table.addCell(
+            Cell(2, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.WHITE)
+                .add(Paragraph("Activity\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus."))
+        )
+
+
+        table.addCell(
+            Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Place: Some random place"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Code: 12345"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("District: Hot District"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("State: Hot State"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Department: Hot Department"))
+        )
+
+        table.addCell(
+            Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Date: 01/01/2001"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Hour: 00:00"))
+        )
+
+        table.addCell(
+            Cell(4, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Participants\n\n\n"))
+        )
+
+        table.addCell(
+            Cell(1, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Participants Quantity"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Women: 000"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Men: 000"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Total: 000"))
+        )
+
+        table.addCell(
+            Cell(5, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Objectives\n\n\n\n"))
+        )
+
+        table.addCell(
+            Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Happenings"))
+        )
+
+        table.addCell(
+            Cell(1, 3)
+                .add(Paragraph("\n\n\n\n\n\n"))
+        )
+
+        table.addCell(
+            Cell(6, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Recommendations\n\n\n\n\n"))
+        )
+
+        table.addCell(
+            Cell(6, 1)
+                .add(Paragraph("Agreements\n\n\n\n\n"))
+        )
+
+        document.add(table)
+        // Close the document
+        document.close()
+
+        Toast.makeText(this, "PDF created successfully: $file", Toast.LENGTH_LONG)
+            .show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -13,7 +13,25 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
-
+import android.Manifest
+import androidx.core.app.ActivityCompat
+import android.os.Build
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import java.io.File
+import android.content.pm.PackageManager
+import android.os.Environment
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.element.Table
+import com.itextpdf.layout.property.HorizontalAlignment
+import com.itextpdf.layout.property.TextAlignment
+import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.layout.element.Cell
+import java.text.SimpleDateFormat
+import java.util.Date
+import androidx.appcompat.app.AlertDialog
+import java.util.Locale
 
 class datos_asistencia_tecnica: AppCompatActivity() {
 
@@ -33,6 +51,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     private lateinit var btnEnviar: Button
     private lateinit var spinnerDepartamento : Spinner
     private lateinit var spinnerMunicipio : Spinner
+    private val FOLDERNAME = "visitas"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,6 +134,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         btnEnviar.setOnClickListener {
             // Verificar si todas las entradas están llenas antes de guardar los datos
             if (verificarEntradasLlenas()) {
+
                 guardarDatos()
             } else {
                 // Mostrar un mensaje de error si alguna entrada está vacía
@@ -203,8 +223,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
         if (result != -1L) {
             // Datos guardados exitosamente
-            val mensaje = "Datos guardados:\nFecha: $fecha\nDistrito: $distrito\nLugar: $lugar"
-            Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Se ha guardado la informacion exitosamente", Toast.LENGTH_LONG).show()
+            generarPdf()
         } else {
             // Error al guardar los datos
             Toast.makeText(
@@ -215,4 +235,199 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         }
     }
 
+    private fun generarPdf() {
+        try {
+
+            val rootFolder = File(Environment.getExternalStorageDirectory(), FOLDERNAME)
+            if (!rootFolder.exists()) {
+                rootFolder.mkdirs()
+            }
+
+            val currentDate = Date()
+            val dateFormat = SimpleDateFormat("ddMMyyyy_HHmmss")
+            val formattedDate = dateFormat.format(currentDate)
+            val pdfFileName = "asistencia_tecnica_$formattedDate.pdf"
+            val pdfFilePath = File(rootFolder, pdfFileName)
+
+            if (pdfFilePath.exists()) {
+                AlertDialog.Builder(this)
+                    .setTitle("File Exists")
+                    .setMessage("Do you want to overwrite the existing file?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        saveFile(pdfFilePath)
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                        // Handle the case when the user chooses not to overwrite the file
+                        // You can generate a new file name based on the current time, for example:
+                        val timeStamp = SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault()).format(Date())
+                        val newFileName = "asistencia_tecnica_${timeStamp}.pdf"
+                        val newFile = File(pdfFilePath.parentFile, newFileName)
+                        saveFile(newFile)
+                    }
+                    .setCancelable(false)
+                    .show()
+            } else {
+                saveFile(pdfFilePath)
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun saveFile(file: File) {
+        val writer = PdfWriter(file)
+        val pdf = PdfDocument(writer)
+        val document = Document(pdf)
+
+        // Add content to the PDF
+        val title = Paragraph("Informe de la Asistencia Tecnica Pedagogica")
+            .setTextAlignment(TextAlignment.CENTER)
+            .setFontSize(18f)
+            .setBold()
+            .setMarginBottom(20f)
+
+        document.add(title)
+
+        // Create a table with 3 columns and 13 rows
+        val table = Table(floatArrayOf(1f, 1f, 1f))
+            .setHorizontalAlignment(HorizontalAlignment.CENTER)
+
+        table.addCell(
+            Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Generalidades"))
+        )
+
+        table.addCell(
+            Cell(2, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.WHITE)
+                .add(Paragraph("Actividad\n${txtActividad.text.toString()}"))
+        )
+
+
+        table.addCell(
+            Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Lugar: ${txtLugar.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Codigo de Infraestructura: ${txtCodigoDistrito.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Distrito: ${txtDistrito.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Municipio: ${spinnerMunicipio.selectedItem.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Departmento: ${spinnerDepartamento.selectedItem.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Fecha: ${txtFecha.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Hora: ${txtHora.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(4, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Participantes\n${txtParticipantes.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Cantidad de Participantes"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Mujeres: ${txtParticipantesMujeres.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Hombres: ${txtParticipantesHombres.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 1)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Total: 000"))
+        )
+
+        table.addCell(
+            Cell(5, 3)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Objetivo\n${txtObjetivo.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(1, 3)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(ColorConstants.BLACK)
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .add(Paragraph("Hallazgos\n${txtHallazgos.text.toString()}"))
+        )
+
+
+        table.addCell(
+            Cell(6, 2)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setFontColor(ColorConstants.BLACK)
+                .add(Paragraph("Recomendaciones\n${txtRecomendaciones.text.toString()}"))
+        )
+
+        table.addCell(
+            Cell(6, 1)
+                .add(Paragraph("Acuerdos\n${txtAcuerdos.text.toString()}"))
+        )
+
+        document.add(table)
+        // Close the document
+        document.close()
+
+        Toast.makeText(this, "El documento se creo como: $file en la carpeta raiz de su dispositivo", Toast.LENGTH_LONG)
+            .show()
+    }
 }
