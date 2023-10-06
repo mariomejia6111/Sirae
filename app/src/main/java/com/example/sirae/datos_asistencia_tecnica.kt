@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.sirae
 import DatabaseHandler
 import android.annotation.SuppressLint
@@ -14,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
 import android.Manifest
+import android.content.Intent
 import androidx.core.app.ActivityCompat
 import android.os.Build
 import com.itextpdf.kernel.pdf.PdfDocument
@@ -21,6 +24,7 @@ import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import java.io.File
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Environment
 import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
@@ -32,8 +36,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.appcompat.app.AlertDialog
 import java.util.Locale
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+
 
 class datos_asistencia_tecnica: AppCompatActivity() {
+    // Inicializa Firebase Storage
+    val storage = FirebaseStorage.getInstance()
+    val storageRef = storage.reference
+    private var selectedImageUri1: Uri? = null
+    private var selectedImageUri2: Uri? = null
+
+    private val IMAGE_PICK_CODE1 = 1001
+    private val IMAGE_PICK_CODE2 = 1002
+    private var email: String? = null
+
 
     private lateinit var txtFecha: EditText
     private lateinit var txtDistrito: EditText
@@ -51,12 +68,18 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     private lateinit var btnEnviar: Button
     private lateinit var spinnerDepartamento : Spinner
     private lateinit var spinnerMunicipio : Spinner
+    private lateinit var imagen1 : Button
+    private lateinit var imagen2 : Button
+
     private val FOLDERNAME = "visitas"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datos_asistencia_tecnica)
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        email = intent.getStringExtra("email")
 
         // Enlazar elementos de entrada y botón
         txtFecha = findViewById(R.id.txt_fecha)
@@ -75,6 +98,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         txtRecomendaciones = findViewById(R.id.txt_recomendaciones)
         txtAcuerdos = findViewById(R.id.txt_acuerdos)
         btnEnviar = findViewById(R.id.btn_enviarSQlite)
+        imagen1 = findViewById(R.id.btn_select_image1)
+        imagen2 = findViewById(R.id.btn_select_image2)
 
         val departamentosElSalvador = arrayOf(
             "Ahuachapán",
@@ -97,7 +122,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         adapterDepartamento.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerDepartamento.adapter = adapterDepartamento
 
-// Establecer el Listener para el Spinner de departamentos
+        // Establecer el Listener para el Spinner de departamentos
         spinnerDepartamento.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View?, position: Int, id: Long) {
                 // Obtener el departamento seleccionado
@@ -119,6 +144,14 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
 
 
+        imagen1.setOnClickListener {
+            seleccionarImagen(IMAGE_PICK_CODE1)
+        }
+
+        // Configurar clic en el botón para seleccionar la segunda imagen
+        imagen2.setOnClickListener {
+            seleccionarImagen(IMAGE_PICK_CODE2)
+        }
 
         // Configurar clic en el EditText de fecha
         txtFecha.setOnClickListener {
@@ -133,9 +166,13 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         // Configurar clic en el botón "Enviar"
         btnEnviar.setOnClickListener {
             // Verificar si todas las entradas están llenas antes de guardar los datos
+            guardarDatosimg(email.toString())
             if (verificarEntradasLlenas()) {
 
                 guardarDatos()
+
+
+
             } else {
                 // Mostrar un mensaje de error si alguna entrada está vacía
                 Toast.makeText(this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show()
@@ -143,6 +180,75 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         }
 
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == IMAGE_PICK_CODE1) {
+                selectedImageUri1 = data.data
+                Toast.makeText(this, "Imagen 1 seleccionada", Toast.LENGTH_SHORT).show()
+            } else if (requestCode == IMAGE_PICK_CODE2) {
+                selectedImageUri2 = data.data
+                Toast.makeText(this, "Imagen 2 seleccionada", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // ... (otros métodos)
+
+    private fun guardarDatosimg(correo: String) {
+
+        // Obtener valores de los EditText
+        val fecha = txtFecha.text.toString()
+        val hora = txtHora.text.toString()
+        // ... (otros campos)
+
+        // Verificar si las imágenes han sido seleccionadas
+        if (selectedImageUri1 != null && selectedImageUri2 != null) {
+            // Subir las imágenes a Firebase Storage y pasar el correo, fecha y hora
+            subirImagenAFirebaseStorage(selectedImageUri1!!, "imagen1", correo, fecha, hora)
+            subirImagenAFirebaseStorage(selectedImageUri2!!, "imagen2", correo, fecha, hora)
+        } else {
+            // Si no se han seleccionado ambas imágenes, muestra un mensaje de error
+            Toast.makeText(this, "Por favor, seleccione ambas imágenes.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Resto de tu código...
+    }
+
+
+    private fun subirImagenAFirebaseStorage(imageUri: Uri, imageName: String, correo: String, fecha: String, hora: String) {
+        // Elimina caracteres no deseados del nombre de la imagen (en este caso, reemplazamos "/" con "_")
+        val nombreArchivo = "$imageName-$fecha-$hora.jpg".replace("/", "_")
+
+        // Obtén una referencia al archivo en Firebase Storage utilizando el correo como parte del nombre
+        val imageRef = storageRef.child("carpeta_de_almacenamiento/$correo/$nombreArchivo")
+
+        // Sube la imagen a Firebase Storage
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                // La imagen se subió exitosamente
+                Toast.makeText(this, "Imagen $nombreArchivo subida exitosamente a Firebase Storage", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                // Ocurrió un error al subir la imagen
+                Toast.makeText(this, "Error al subir la imagen $nombreArchivo a Firebase Storage", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+
+
+
+
+    private fun seleccionarImagen(requestCode: Int) {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, requestCode)
+    }
+
+
 
     private fun verificarEntradasLlenas(): Boolean {
         // Verificar cada entrada de texto para asegurarse de que no esté vacía

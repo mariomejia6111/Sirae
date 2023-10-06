@@ -34,6 +34,7 @@ import com.itextpdf.layout.element.Cell
 import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import java.util.Locale
 
 class Login : AppCompatActivity() {
@@ -43,6 +44,7 @@ class Login : AppCompatActivity() {
     private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
 
     private val FOLDER_NAME = "visitas"
+
 
     private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {

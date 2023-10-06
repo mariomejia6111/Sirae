@@ -1,8 +1,10 @@
 package com.example.sirae
 import DatabaseHandler
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.util.Log
@@ -10,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -19,10 +23,14 @@ import com.google.firebase.database.ValueEventListener
 class home : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var dbHandler: DatabaseHandler
+    private val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 123
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
+        }
         database = FirebaseDatabase.getInstance().reference
         dbHandler = DatabaseHandler(this)
         setContentView(R.layout.activity_home)
@@ -37,8 +45,10 @@ class home : AppCompatActivity() {
         val welcomeText = findViewById<TextView>(R.id.welcome_text)
         welcomeText.text = "$welcomeMessage\nCorreo: $email"
 
+
         btn_datos.setOnClickListener {
             val intent = Intent(this, datos_asistencia_tecnica::class.java)
+            intent.putExtra("email", email)
             startActivity(intent)
         }
         progVisitaBt.setOnClickListener{

@@ -26,11 +26,11 @@
 
         <TextView
             android:id="@+id/textView15"
+            style="@style/Titles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="208dp"
             android:text="Informe de la Asistencia Tecnica Pedagogica"
-            style="@style/Titles"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -200,10 +200,10 @@
 
         <Spinner
             android:id="@+id/spinner_departamento"
+            style="@style/SpinnerItems"
             android:layout_width="350dp"
             android:layout_height="45dp"
             android:layout_marginTop="4dp"
-            style="@style/SpinnerItems"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
@@ -405,16 +405,38 @@
             style="@style/Button"
             android:layout_width="175dp"
             android:layout_height="50dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="25dp"
-            android:text="Enviar"
+            android:layout_marginTop="16dp"
             android:drawableLeft="@drawable/send"
+            android:text="Enviar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_image1" />
+
+        <Button
+            android:id="@+id/btn_select_image1"
+            android:layout_width="174dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:text="Imagen 1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintHorizontal_bias="0.067"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_acuerdos"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.351" />
+
+        <Button
+            android:id="@+id/btn_select_image2"
+            android:layout_width="174dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:text="Imagen 2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.354"
+            app:layout_constraintStart_toEndOf="@+id/btn_select_image1"
+            app:layout_constraintTop_toBottomOf="@+id/txt_acuerdos"
+            app:layout_constraintVertical_bias="0.351" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

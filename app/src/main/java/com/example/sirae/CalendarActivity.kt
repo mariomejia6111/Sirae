@@ -23,6 +23,7 @@ class CalendarActivity : AppCompatActivity() {
     private val datesWithEvents = mutableListOf<String>()
     private var eventCounter: Long = 0 // Contador para generar IDs únicos
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
