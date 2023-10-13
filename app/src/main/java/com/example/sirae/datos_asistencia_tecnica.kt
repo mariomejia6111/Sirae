@@ -344,7 +344,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     private fun generarPdf() {
         try {
 
-            val rootFolder = File(Environment.getExternalStorageDirectory(), FOLDERNAME)
+            val rootFolder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), FOLDERNAME)
             if (!rootFolder.exists()) {
                 rootFolder.mkdirs()
             }
