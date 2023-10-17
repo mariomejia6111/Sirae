@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.Secure
 import android.util.Log
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 
 class home : AppCompatActivity() {
     private lateinit var database: DatabaseReference
@@ -59,6 +62,7 @@ class home : AppCompatActivity() {
 
         btn_firebase.setOnClickListener {
             obtenerYSubirDatosAFirebase(email, installationId)
+            subirFotosAFirebaseStorage(email.toString())
         }
     }
 
@@ -132,6 +136,79 @@ class home : AppCompatActivity() {
             Toast.makeText(this, "Correo o identificador inválido", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun subirFotosAFirebaseStorage(email: String) {
+        if (!email.isNullOrEmpty()) {
+            val emailSinPunto = email.replace(".", "_")
+            val emailSinArroba = emailSinPunto.substringBefore("@")
+
+            // Referencia a la raíz de Firebase Storage
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+
+            // Ruta local donde se almacenan las imágenes
+            val rutaLocal = File(getExternalFilesDir(null), "fotos")
+
+            // Lista de archivos en la carpeta local
+            val archivos = rutaLocal.listFiles()
+
+            if (archivos != null && archivos.isNotEmpty()) {
+                // Lista de nombres de archivos en Firebase Storage
+                val nombresFirebase = mutableListOf<String>()
+
+                // Obtener los nombres de los archivos en Firebase Storage
+                storageRef.child(emailSinArroba).listAll()
+                    .addOnSuccessListener { result ->
+                        for (item in result.items) {
+                            nombresFirebase.add(item.name)
+                        }
+
+                        // Verificar si hay imágenes nuevas para subir
+                        var hayImagenesNuevas = false
+
+                        archivos.forEach { archivo ->
+                            val nombreArchivo = archivo.name
+                            if (!nombresFirebase.contains(nombreArchivo)) {
+                                // El archivo no existe en Firebase Storage
+                                val imagenUri = Uri.fromFile(archivo)
+                                val imagenRef = storageRef.child("$emailSinArroba/$nombreArchivo")
+
+                                imagenRef.putFile(imagenUri)
+                                    .addOnSuccessListener {
+                                        // Imagen subida con éxito
+                                        Toast.makeText(this@home, "$nombreArchivo subido a Firebase Storage", Toast.LENGTH_SHORT).show()
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        // Error al subir la imagen
+                                        Log.e("FirebaseStorageError", "Error al subir $nombreArchivo: ${exception.message}")
+                                        Toast.makeText(this@home, "Error al subir $nombreArchivo", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                hayImagenesNuevas = true
+                            }
+                        }
+
+                        if (hayImagenesNuevas) {
+                            // Al menos una imagen nueva fue subida
+                            Toast.makeText(this@home, "Imágenes nuevas subidas a Firebase Storage", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // No hay imágenes nuevas para subir
+                            Toast.makeText(this@home, "No hay imágenes nuevas para subir", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("FirebaseStorageError", "Error al listar archivos en Firebase Storage: ${e.message}")
+                    }
+            } else {
+                Toast.makeText(this@home, "No hay imágenes locales para subir", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Manejar el caso en que el correo no sea válido
+            Toast.makeText(this, "Correo inválido", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
 
 
