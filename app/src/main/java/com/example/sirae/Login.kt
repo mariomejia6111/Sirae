@@ -16,34 +16,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import java.util.concurrent.TimeUnit
 
-import android.Manifest
-import androidx.core.app.ActivityCompat
-import android.os.Build
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import java.io.File
-import android.content.pm.PackageManager
-import android.os.Environment
-import com.itextpdf.layout.element.Paragraph
-import com.itextpdf.layout.element.Table
-import com.itextpdf.layout.property.HorizontalAlignment
-import com.itextpdf.layout.property.TextAlignment
-import com.itextpdf.kernel.colors.ColorConstants
-import com.itextpdf.layout.element.Cell
-import java.text.SimpleDateFormat
-import java.util.Date
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import java.util.Locale
 
 class Login : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
     private lateinit var sharedPreferences: SharedPreferences
-    private val WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1
 
-    private val FOLDER_NAME = "visitas"
 
 
     private val googleSignInLauncher =
@@ -96,7 +73,6 @@ class Login : AppCompatActivity() {
         try {
             val account = task.getResult(ApiException::class.java)
             val email = account?.email
-            val displayName = account?.displayName
 
             // Almacena la información de inicio de sesión y marca de tiempo
             saveLoginInfo(email)
@@ -119,7 +95,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun goToWelcomeActivity(email: String?) {
-        val intent = Intent(this, home::class.java)
+        val intent = Intent(this, Home::class.java)
         intent.putExtra("email", email)
         startActivity(intent)
         finish()

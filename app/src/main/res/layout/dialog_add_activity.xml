@@ -20,7 +20,8 @@
         android:layout_marginTop="50dp"
         android:hint="Actividad"
         android:textSize="25dp"
-        android:background="@drawable/roundboxes"/>
+        android:background="@drawable/roundboxes"
+        android:minHeight="48dp" />
 
 
 </LinearLayout>

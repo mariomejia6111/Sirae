@@ -1,7 +1,6 @@
 @file:Suppress("DEPRECATION")
 
 package com.example.sirae
-import DatabaseHandler
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -15,16 +14,12 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import androidx.core.app.ActivityCompat
-import android.os.Build
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import java.io.File
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -39,14 +34,12 @@ import java.util.Date
 import androidx.appcompat.app.AlertDialog
 import java.util.Locale
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import java.io.FileOutputStream
 
 
-class datos_asistencia_tecnica: AppCompatActivity() {
+class Datosasistenciatecnica: AppCompatActivity() {
     // Inicializa Firebase Storage
     val storage = FirebaseStorage.getInstance()
-    val storageRef = storage.reference
     private val REQUEST_IMAGE1 = 1
     private val REQUEST_IMAGE2 = 2
     private lateinit var imagen1: Button
@@ -83,8 +76,6 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         setContentView(R.layout.activity_datos_asistencia_tecnica)
         imagen1 = findViewById(R.id.btn_select_image1)
         imagen2 = findViewById(R.id.btn_select_image2)
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
         email = intent.getStringExtra("email")
 
 
@@ -167,7 +158,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
                 // Crear un adaptador para el Spinner de municipios
                 val adapterMunicipio = ArrayAdapter(
-                    this@datos_asistencia_tecnica,
+                    this@Datosasistenciatecnica,
                     android.R.layout.simple_spinner_item,
                     municipiosCorrespondientes
                 )
@@ -213,6 +204,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
     }
 
     // Luego, en onActivityResult, configura las variables de selección
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -250,7 +242,13 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         val formattedHora = hora.replace(":", "_")
         val requestCodeString = requestCode.toString()
 
-        val destinationFile = File(photosFolder, "${formattedFecha}_${formattedHora}_$requestCodeString.jpg")
+        val fileName = when (requestCode) {
+            REQUEST_IMAGE1 -> "img1_${formattedFecha}_${formattedHora}.jpg"
+            REQUEST_IMAGE2 -> "img2_${formattedFecha}_${formattedHora}.jpg"
+            else -> "unknown_${formattedFecha}_${formattedHora}.jpg"
+        }
+
+        val destinationFile = File(photosFolder, fileName)
         val destinationOutputStream = FileOutputStream(destinationFile)
 
         sourceInputStream?.use { input ->
@@ -261,9 +259,8 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
         sourceInputStream?.close()
         destinationOutputStream.close()
-
-        Toast.makeText(this, "Imagen $requestCodeString copiada a la carpeta 'fotos'", Toast.LENGTH_SHORT).show()
     }
+
 
 
 
@@ -359,7 +356,7 @@ class datos_asistencia_tecnica: AppCompatActivity() {
 
         if (result != -1L) {
             // Datos guardados exitosamente
-            Toast.makeText(this, "Se ha guardado la informacion exitosamente", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Se guardo con exito el pdf fue guardado en Descargas", Toast.LENGTH_LONG).show()
             generarPdf()
         } else {
             // Error al guardar los datos
@@ -568,8 +565,5 @@ class datos_asistencia_tecnica: AppCompatActivity() {
         document.add(table)
         // Close the document
         document.close()
-
-        Toast.makeText(this, "El documento se creo como: $file en la carpeta raiz de su dispositivo", Toast.LENGTH_LONG)
-            .show()
     }
 }

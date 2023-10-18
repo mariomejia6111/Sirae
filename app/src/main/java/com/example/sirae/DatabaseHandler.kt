@@ -1,9 +1,9 @@
+package com.example.sirae
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.sirae.AsistenciaTecnicaModel
 import java.io.File
 
 class DatabaseHandler(context: Context) :
@@ -49,7 +49,7 @@ class DatabaseHandler(context: Context) :
     // Resto del código como antes
     override fun onCreate(db: SQLiteDatabase?) {
         // Crear la tabla cuando se crea la base de datos por primera vez
-        val CREATE_ASISTENCIA_TECNICA_TABLE = ("CREATE TABLE $TABLE_ASISTENCIA_TECNICA (" +
+        val createasistenciatecnicatable = ("CREATE TABLE $TABLE_ASISTENCIA_TECNICA (" +
                 "$KEY_ID INTEGER PRIMARY KEY," +
                 "$KEY_FECHA TEXT," +
                 "$KEY_DISTRITO TEXT," +
@@ -67,7 +67,7 @@ class DatabaseHandler(context: Context) :
                 "$KEY_HALLAZGOS TEXT," +
                 "$KEY_RECOMENDACIONES TEXT," +
                 "$KEY_ACUERDOS TEXT)")
-        db?.execSQL(CREATE_ASISTENCIA_TECNICA_TABLE)
+        db?.execSQL(createasistenciatecnicatable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

@@ -20,7 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
-        app:srcCompat="@drawable/new_event" />
+        app:srcCompat="@drawable/new_event"
+        android:contentDescription="Agregar evento" />
 
     <CalendarView
         android:id="@+id/calendarView"

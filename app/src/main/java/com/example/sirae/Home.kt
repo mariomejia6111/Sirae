@@ -1,10 +1,9 @@
 package com.example.sirae
-import DatabaseHandler
-import android.Manifest
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.Secure
@@ -13,8 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -23,22 +21,19 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
-class home : AppCompatActivity() {
+class Home : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var dbHandler: DatabaseHandler
-    private val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 123
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
-        }
         database = FirebaseDatabase.getInstance().reference
         dbHandler = DatabaseHandler(this)
         setContentView(R.layout.activity_home)
-        val btn_datos = findViewById<ImageView>(R.id.ingresarDatosBt)
-        val btn_firebase = findViewById<ImageView>(R.id.btn_firebase)
+        val btndatos = findViewById<ImageView>(R.id.ingresarDatosBt)
+        val btnfirebase = findViewById<ImageView>(R.id.btn_firebase)
         val progVisitaBt = findViewById<ImageView>(R.id.progVisitaBt)
 
         val email = intent.getStringExtra("email")
@@ -49,8 +44,8 @@ class home : AppCompatActivity() {
         welcomeText.text = "$welcomeMessage\nCorreo: $email"
 
 
-        btn_datos.setOnClickListener {
-            val intent = Intent(this, datos_asistencia_tecnica::class.java)
+        btndatos.setOnClickListener {
+            val intent = Intent(this, Datosasistenciatecnica::class.java)
             intent.putExtra("email", email)
             startActivity(intent)
         }
@@ -60,7 +55,7 @@ class home : AppCompatActivity() {
             startActivity(intent)
         }
 
-        btn_firebase.setOnClickListener {
+        btnfirebase.setOnClickListener {
             obtenerYSubirDatosAFirebase(email, installationId)
             subirFotosAFirebaseStorage(email.toString())
         }
@@ -117,17 +112,17 @@ class home : AppCompatActivity() {
                         }
 
                         // Notifica al usuario que los datos se subieron con éxito
-                        Toast.makeText(this@home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Home, "Datos subidos a Firebase con éxito", Toast.LENGTH_SHORT).show()
                     } else {
                         // No hay datos nuevos para subir, muestra un mensaje
-                        Toast.makeText(this@home, "No hay datos nuevos para subir", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Home, "No hay datos nuevos para subir", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     // Manejar el error aquí
                     Log.e("FirebaseError", "Error en la lectura de Firebase: ${error.message}")
-                    Toast.makeText(this@home, "Error en la lectura de Firebase", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Home, "Error en la lectura de Firebase", Toast.LENGTH_SHORT).show()
                 }
 
             })
@@ -138,7 +133,7 @@ class home : AppCompatActivity() {
     }
 
     private fun subirFotosAFirebaseStorage(email: String) {
-        if (!email.isNullOrEmpty()) {
+        if (email.isNotEmpty()) {
             val emailSinPunto = email.replace(".", "_")
             val emailSinArroba = emailSinPunto.substringBefore("@")
 
@@ -176,12 +171,12 @@ class home : AppCompatActivity() {
                                 imagenRef.putFile(imagenUri)
                                     .addOnSuccessListener {
                                         // Imagen subida con éxito
-                                        Toast.makeText(this@home, "$nombreArchivo subido a Firebase Storage", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@Home, "$nombreArchivo subido a Firebase Storage", Toast.LENGTH_SHORT).show()
                                     }
                                     .addOnFailureListener { exception ->
                                         // Error al subir la imagen
                                         Log.e("FirebaseStorageError", "Error al subir $nombreArchivo: ${exception.message}")
-                                        Toast.makeText(this@home, "Error al subir $nombreArchivo", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@Home, "Error al subir $nombreArchivo", Toast.LENGTH_SHORT).show()
                                     }
 
                                 hayImagenesNuevas = true
@@ -190,17 +185,17 @@ class home : AppCompatActivity() {
 
                         if (hayImagenesNuevas) {
                             // Al menos una imagen nueva fue subida
-                            Toast.makeText(this@home, "Imágenes nuevas subidas a Firebase Storage", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Home, "Imágenes nuevas subidas a Firebase Storage", Toast.LENGTH_SHORT).show()
                         } else {
                             // No hay imágenes nuevas para subir
-                            Toast.makeText(this@home, "No hay imágenes nuevas para subir", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@Home, "No hay imágenes nuevas para subir", Toast.LENGTH_SHORT).show()
                         }
                     }
                     .addOnFailureListener { e ->
                         Log.e("FirebaseStorageError", "Error al listar archivos en Firebase Storage: ${e.message}")
                     }
             } else {
-                Toast.makeText(this@home, "No hay imágenes locales para subir", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Home, "No hay imágenes locales para subir", Toast.LENGTH_SHORT).show()
             }
         } else {
             // Manejar el caso en que el correo no sea válido
@@ -213,6 +208,7 @@ class home : AppCompatActivity() {
 
 
 
+    @SuppressLint("HardwareIds")
     private fun obtenerIDUnico(context: Context): String {
         return Secure.getString(context.contentResolver, Secure.ANDROID_ID)
     }

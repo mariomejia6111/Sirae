@@ -7,7 +7,7 @@ class MunicipioData {
             return municipiosPorDepartamento[departamento] ?: emptyArray()
         }
 
-        val municipiosPorDepartamento = mapOf(
+        private val municipiosPorDepartamento = mapOf(
             "Ahuachapán" to arrayOf(
                 "Ahuachapán",
                 "Apaneca",

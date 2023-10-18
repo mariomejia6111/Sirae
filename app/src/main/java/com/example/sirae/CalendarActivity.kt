@@ -55,6 +55,7 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+
     private fun loadEventsFromFirebase() {
         // Agrega un listener para cargar eventos desde Firebase
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -133,7 +134,9 @@ class CalendarActivity : AppCompatActivity() {
 
                 dialog.dismiss()
             }
-        }
+
+
+    }
 
         builder.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
@@ -144,9 +147,10 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun generateEventId(): Long {
-        eventCounter++
-        return eventCounter
+        val maxId = events.maxByOrNull { it.id }?.id ?: 0
+        return maxId + 1
     }
+
 
     private fun formatDate(year: Int, month: Int, dayOfMonth: Int): String {
         val calendar = Calendar.getInstance()
@@ -183,4 +187,6 @@ class CalendarActivity : AppCompatActivity() {
 
 
     data class Event(val id: Long = 0, val date: String = "", val description: String = "")
+
 }
+
