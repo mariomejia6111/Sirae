@@ -51,15 +51,17 @@
             android:id="@+id/txt_actividad"
             android:layout_width="350dp"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView16"
-            android:hint="." />
+            android:padding="8dp"
+            android:gravity="top|start"
+           />
+
 
         <TextView
             android:id="@+id/textView17"
@@ -77,15 +79,15 @@
             android:id="@+id/txt_lugar"
             android:layout_width="350dp"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView17"
-            android:hint="."/>
+            android:padding="8dp"
+            android:gravity="top|start"/>
 
         <TextView
             android:id="@+id/textView18"
@@ -103,15 +105,15 @@
             android:id="@+id/txt_distrito"
             android:layout_width="350dp"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView18"
-            android:hint="."/>
+            android:padding="8dp"
+            android:gravity="top|start"/>
 
         <TextView
             android:id="@+id/textView19"
@@ -129,16 +131,15 @@
             android:id="@+id/txt_fecha"
             android:layout_width="350dp"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:focusable="false"
             android:inputType="date"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19"
-            android:hint="."
+            android:padding="8dp"
             />
 
         <TextView
@@ -156,16 +157,16 @@
         <EditText
             android:id="@+id/txt_codigodistrito"
             android:layout_width="350dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView20"
-            android:hint="."/>
+            android:padding="8dp"
+            android:gravity="top|start"/>
 
         <TextView
             android:id="@+id/textView21"
@@ -184,7 +185,7 @@
             android:id="@+id/spinner_municipio"
             style="@style/SpinnerItems"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="48dp"
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.262"
@@ -207,7 +208,7 @@
             android:id="@+id/spinner_departamento"
             style="@style/SpinnerItems"
             android:layout_width="350dp"
-            android:layout_height="45dp"
+            android:layout_height="48dp"
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.262"
@@ -230,16 +231,16 @@
         <EditText
             android:id="@+id/txt_hora"
             android:layout_width="350dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:focusable="false"
             android:inputType="none"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView23" />
+            app:layout_constraintTop_toBottomOf="@+id/textView23"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/textView24"
@@ -251,20 +252,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.057"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView23" />
+            app:layout_constraintTop_toBottomOf="@+id/textView23"/>
 
         <EditText
             android:id="@+id/txt_participantes"
             android:layout_width="350dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+            app:layout_constraintTop_toBottomOf="@+id/textView24"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/textView25"
@@ -272,7 +273,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="75dp"
-            android:text="Participantes Mujeres"
+            android:text="Participantes Mujeres: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.075"
             app:layout_constraintStart_toStartOf="parent"
@@ -281,15 +282,15 @@
         <EditText
             android:id="@+id/Participantes_M"
             android:layout_width="350dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView25" />
+            app:layout_constraintTop_toBottomOf="@+id/textView25"
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/textView26"
@@ -297,7 +298,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="75dp"
-            android:text="Participantes Hombres"
+            android:text="Participantes Hombres:"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.075"
             app:layout_constraintStart_toStartOf="parent"
@@ -307,14 +308,14 @@
             android:id="@+id/Participantes_H"
             android:layout_width="350dp"
             android:layout_height="45dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             android:ems="10"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView26" />
+            app:layout_constraintTop_toBottomOf="@+id/textView26"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/textView27"
@@ -332,12 +333,12 @@
         <EditText
             android:id="@+id/Objetivo"
             style="@style/EditTextForLongText"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            app:layout_constraintTop_toBottomOf="@+id/textView27"
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/textView28"
@@ -345,21 +346,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="125dp"
-            android:text="Hallazgos"
+            android:text="Hallazgos: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.049"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            app:layout_constraintTop_toBottomOf="@+id/textView27"
+            />
 
         <EditText
             android:id="@+id/txt_hallazgos"
             style="@style/EditTextForLongText"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView28" />
+            app:layout_constraintTop_toBottomOf="@+id/textView28"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/textView29"
@@ -367,7 +369,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="125dp"
-            android:text="Recomendaciones"
+            android:text="Recomendaciones: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.059"
             app:layout_constraintStart_toStartOf="parent"
@@ -376,12 +378,12 @@
         <EditText
             android:id="@+id/txt_recomendaciones"
             style="@style/EditTextForLongText"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView29" />
+            app:layout_constraintTop_toBottomOf="@+id/textView29"
+            android:padding="8dp"/>
 
         <TextView
             android:id="@+id/textView30"
@@ -389,7 +391,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="125dp"
-            android:text="Acuerdos"
+            android:text="Acuerdos: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.047"
             app:layout_constraintStart_toStartOf="parent"
@@ -398,12 +400,12 @@
         <EditText
             android:id="@+id/txt_acuerdos"
             style="@style/EditTextForLongText"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/roundboxes"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView30" />
+            app:layout_constraintTop_toBottomOf="@+id/textView30"
+            android:padding="8dp"/>
 
         <Button
             android:id="@+id/btn_enviarSQlite"
@@ -413,35 +415,37 @@
             android:layout_marginTop="16dp"
             android:drawableLeft="@drawable/send"
             android:text="Enviar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_select_image1" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_image1"
+            android:layout_marginBottom="25dp"/>
 
         <Button
             android:id="@+id/btn_select_image1"
             android:layout_width="174dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:text="Imagen 1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintHorizontal_bias="0.112"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_acuerdos"
-            app:layout_constraintVertical_bias="0.351" />
+            app:layout_constraintVertical_bias="0.369" />
 
         <Button
             android:id="@+id/btn_select_image2"
             android:layout_width="174dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:text="Imagen 2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.354"
+            app:layout_constraintHorizontal_bias="0.521"
             app:layout_constraintStart_toEndOf="@+id/btn_select_image1"
             app:layout_constraintTop_toBottomOf="@+id/txt_acuerdos"
-            app:layout_constraintVertical_bias="0.351" />
+            app:layout_constraintVertical_bias="0.367" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
