@@ -356,7 +356,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
 
         if (result != -1L) {
             // Datos guardados exitosamente
-            Toast.makeText(this, "Se guardo con exito el pdf fue guardado en Descargas", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Datos Guardados\n El archivo PDF se guardó en Descargas", Toast.LENGTH_LONG).show()
             generarPdf()
         } else {
             // Error al guardar los datos
@@ -530,7 +530,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
             Cell(1, 1)
                 .setTextAlignment(TextAlignment.LEFT)
                 .setFontColor(ColorConstants.BLACK)
-                .add(Paragraph("Total: 000"))
+                .add(Paragraph("Total: ${txtParticipantesMujeres.text.toString().toInt() + txtParticipantesHombres.text.toString().toInt()}"))
         )
 
         table.addCell(
