@@ -38,11 +38,8 @@ class Home : AppCompatActivity() {
 
         val email = intent.getStringExtra("email")
         val installationId = obtenerIDUnico(this)
-
-        val welcomeMessage = "Hola, bienvenido!"
         val welcomeText = findViewById<TextView>(R.id.welcome_text)
-        welcomeText.text = "$welcomeMessage\nCorreo: $email"
-
+        welcomeText.text = "Correo: $email"
 
         btndatos.setOnClickListener {
             val intent = Intent(this, Datosasistenciatecnica::class.java)

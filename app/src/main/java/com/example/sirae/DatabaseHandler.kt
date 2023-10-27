@@ -52,10 +52,10 @@ class DatabaseHandler(context: Context) :
         val createasistenciatecnicatable = ("CREATE TABLE $TABLE_ASISTENCIA_TECNICA (" +
                 "$KEY_ID INTEGER PRIMARY KEY," +
                 "$KEY_FECHA TEXT," +
-                "$KEY_DISTRITO TEXT," +
+                "$KEY_DISTRITO INTEGER," +
                 "$KEY_LUGAR TEXT," +
                 "$KEY_ACTIVIDAD TEXT," +
-                "$KEY_CODIGO_DISTRITO TEXT," +
+                "$KEY_CODIGO_DISTRITO INTEGER," +
                 "$KEY_MUNICIPIO TEXT," +
                 "$KEY_DEPARTAMENTO TEXT," +
                 "$KEY_HORA TEXT," +
@@ -127,10 +127,10 @@ class DatabaseHandler(context: Context) :
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(KEY_ID))
                 val fecha = cursor.getString(cursor.getColumnIndex(KEY_FECHA))
-                val distrito = cursor.getString(cursor.getColumnIndex(KEY_DISTRITO))
+                val distrito = cursor.getInt(cursor.getColumnIndex(KEY_DISTRITO))
                 val lugar = cursor.getString(cursor.getColumnIndex(KEY_LUGAR))
                 val actividad = cursor.getString(cursor.getColumnIndex(KEY_ACTIVIDAD))
-                val codigoDistrito = cursor.getString(cursor.getColumnIndex(KEY_CODIGO_DISTRITO))
+                val codigoDistrito = cursor.getInt(cursor.getColumnIndex(KEY_CODIGO_DISTRITO))
                 val municipio = cursor.getString(cursor.getColumnIndex(KEY_MUNICIPIO))
                 val departamento = cursor.getString(cursor.getColumnIndex(KEY_DEPARTAMENTO))
                 val hora = cursor.getString(cursor.getColumnIndex(KEY_HORA))

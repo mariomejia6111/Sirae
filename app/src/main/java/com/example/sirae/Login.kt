@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit
 class Login : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var btnGoogle: Button
 
 
 
@@ -37,7 +39,7 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
-        val btnGoogle = findViewById<Button>(R.id.btn_google)
+        btnGoogle = findViewById<Button>(R.id.btn_google)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
@@ -62,7 +64,23 @@ class Login : AppCompatActivity() {
             signInWithGoogle()
         }
 
+
     }
+    fun resetSession(view: View) {
+        // Aquí restablece las variables de sesión a su estado inicial
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLoggedIn", false)
+        editor.putLong("lastLoginTime", 0)
+        editor.putString("email", null)
+        editor.apply()
+
+        // También puedes desvincular la cuenta de Google (opcional)
+        googleSignInClient.signOut()
+
+        // Asegúrate de que el botón esté habilitado
+        btnGoogle.isEnabled = true
+    }
+
 
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -74,16 +92,35 @@ class Login : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)
             val email = account?.email
 
-            // Almacena la información de inicio de sesión y marca de tiempo
-            saveLoginInfo(email)
+            // Verificar si el correo electrónico cumple con el patrón
+            if (isEmailAllowed(email)) {
+                // Almacena la información de inicio de sesión y marca de tiempo
+                saveLoginInfo(email)
 
-            // Redirigir a la nueva actividad con los datos
-            goToWelcomeActivity(email)
+                // Redirigir a la nueva actividad con los datos
+                goToWelcomeActivity(email)
+            } else {
+                // Correo electrónico no permitido, mostrar un mensaje o realizar alguna acción
+                Toast.makeText(this, "Correo electrónico no permitido", Toast.LENGTH_SHORT).show()
+            }
         } catch (e: ApiException) {
             Log.e("LoginActivity", "Error al obtener información del usuario: ${e.message}")
-            Toast.makeText(this, "Error al obtener información del usuario", Toast.LENGTH_SHORT).show()
+            // En caso de error, no deshabilitar el botón
+        } finally {
+            btnGoogle.isEnabled = true  // Asegurarse de que el botón se habilite o no después del manejo del resultado
         }
     }
+
+
+
+    private fun isEmailAllowed(email: String?): Boolean {
+        return email?.endsWith("@clases.edu.sv") == true ||
+                email?.endsWith("@mined.gob.sv") == true ||
+                email == "mariopineda611@gmail.com" ||
+                email == "gonzalo.hernandez@catolica.edu.sv"
+    }
+
+
 
     private fun saveLoginInfo(email: String?) {
         val currentTime = System.currentTimeMillis()
