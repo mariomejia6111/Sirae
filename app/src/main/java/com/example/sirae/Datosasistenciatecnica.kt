@@ -23,6 +23,7 @@ import java.io.File
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.widget.ImageView
 import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.property.HorizontalAlignment
@@ -49,12 +50,15 @@ class Datosasistenciatecnica: AppCompatActivity() {
     private var imageUri2: Uri? = null
     private var image1Selected = false
     private var image2Selected = false
+    private lateinit var imageView1: ImageView
+    private lateinit var imageView2: ImageView
+
 
 
     private lateinit var txtFecha: EditText
     private lateinit var txtDistrito: EditText
     private lateinit var txtLugar: EditText
-    private lateinit var txtActividad: EditText
+    private lateinit var txtActividad: Spinner
     private lateinit var txtCodigoDistrito: EditText
     private lateinit var txtHora: EditText
     private lateinit var txtParticipantes: EditText
@@ -118,6 +122,11 @@ class Datosasistenciatecnica: AppCompatActivity() {
         btnEnviar = findViewById(R.id.btn_enviarSQlite)
         imagen1 = findViewById(R.id.btn_select_image1)
         imagen2 = findViewById(R.id.btn_select_image2)
+        imageView1 = findViewById(R.id.imageView1)
+        imageView2 = findViewById(R.id.imageView2)
+        imageView1.visibility = View.GONE
+        imageView2.visibility = View.GONE
+
 
         val departamentosElSalvador = arrayOf(
             "Ahuachapán",
@@ -170,6 +179,12 @@ class Datosasistenciatecnica: AppCompatActivity() {
                 // Manejar el caso en que no se haya seleccionado nada
             }
         }
+        val opcionesActividad = arrayOf("Visita de Asistencia Tecnica Pedagógica", "Reunion con Directores de Distrito", "Reflexion Pedagógica")
+        val adapterActividad = ArrayAdapter(this, android.R.layout.simple_spinner_item, opcionesActividad)
+        adapterActividad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Configurar el adaptador en el Spinner
+        txtActividad.adapter = adapterActividad
 
 
         // Configurar clic en el EditText de fecha
@@ -207,7 +222,6 @@ class Datosasistenciatecnica: AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_IMAGE1 || requestCode == REQUEST_IMAGE2) {
                 val imageUri = data?.data
@@ -216,9 +230,17 @@ class Datosasistenciatecnica: AppCompatActivity() {
                     if (requestCode == REQUEST_IMAGE1) {
                         imageUri1 = imageUri
                         image1Selected = true
+                        // Cargar y mostrar la imagen en imageView1
+                        imageView2.setImageURI(imageUri)
+                        // Habilitar la visibilidad de imageView1
+                        imageView1.visibility = View.VISIBLE
                     } else if (requestCode == REQUEST_IMAGE2) {
                         imageUri2 = imageUri
                         image2Selected = true
+                        // Cargar y mostrar la imagen en imageView2
+                        imageView1.setImageURI(imageUri)
+                        // Habilitar la visibilidad de imageView2
+                        imageView2.visibility = View.VISIBLE
                     }
                 }
 
@@ -227,8 +249,8 @@ class Datosasistenciatecnica: AppCompatActivity() {
                 Toast.makeText(this, "Error al seleccionar la imagen", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+    }
 
     private fun copySelectedImageToPhotosFolder(imageUri: Uri, fecha: String, hora: String, requestCode: Int) {
         val sourceInputStream = contentResolver.openInputStream(imageUri)
@@ -240,7 +262,6 @@ class Datosasistenciatecnica: AppCompatActivity() {
 
         val formattedFecha = fecha.replace("/", "_")
         val formattedHora = hora.replace(":", "_")
-        val requestCodeString = requestCode.toString()
 
         val fileName = when (requestCode) {
             REQUEST_IMAGE1 -> "img1_${formattedFecha}_${formattedHora}.jpg"
@@ -269,7 +290,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
         // Verificar cada entrada de texto para asegurarse de que no esté vacía
         val todasLasEntradasLlenas = !(
                 txtFecha.text.isBlank() || txtDistrito.text.isBlank() || txtLugar.text.isBlank() ||
-                        txtActividad.text.isBlank() || txtCodigoDistrito.text.isBlank() ||
+                        txtActividad.selectedItem.toString().isBlank() || txtCodigoDistrito.text.isBlank() ||
                         txtHora.text.isBlank() || txtParticipantes.text.isBlank() ||
                         txtParticipantesMujeres.text.isBlank() || txtParticipantesHombres.text.isBlank() ||
                         txtObjetivo.text.isBlank() || txtHallazgos.text.isBlank() ||
@@ -282,14 +303,14 @@ class Datosasistenciatecnica: AppCompatActivity() {
     }
     private fun mostrarDialogoFecha() {
         val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
+        val year1 = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
             txtFecha.setText(selectedDate)
-        }, year, month, day)
+        }, year1, month, day)
 
         datePickerDialog.show()
     }
@@ -297,12 +318,12 @@ class Datosasistenciatecnica: AppCompatActivity() {
     private fun mostrarDialogoHora() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val minute1 = calendar.get(Calendar.MINUTE)
 
         val timePickerDialog = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             val selectedTime = "$hourOfDay:$minute"
             txtHora.setText(selectedTime)
-        }, hour, minute, true)
+        }, hour, minute1, true)
 
         timePickerDialog.show()
     }
@@ -312,7 +333,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
         val fecha = txtFecha.text.toString()
         val distrito = txtDistrito.text.toString()
         val lugar = txtLugar.text.toString()
-        val actividad = txtActividad.text.toString()
+        val actividad = txtActividad.selectedItem.toString()
         val codigoDistrito = txtCodigoDistrito.text.toString()
         val municipio = spinnerMunicipio.selectedItem.toString()
         val departamento = spinnerDepartamento.selectedItem.toString()
@@ -445,7 +466,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
                 .setTextAlignment(TextAlignment.LEFT)
                 .setFontColor(ColorConstants.BLACK)
                 .setBackgroundColor(ColorConstants.WHITE)
-                .add(Paragraph("Actividad\n${txtActividad.text.toString()}"))
+                .add(Paragraph("Actividad\n${txtActividad.selectedItem.toString()}"))
         )
 
 

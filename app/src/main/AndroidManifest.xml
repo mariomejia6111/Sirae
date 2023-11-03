@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>-->
 
-        <activity android:name=".Datosasistenciatecnica"
+        <activity android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
         </activity>
 
         <activity android:name=".Home" />
-        <activity android:name=".Login" />
+        <activity android:name=".Datosasistenciatecnica" />
         <activity android:name=".CalendarActivity" />
 
 
