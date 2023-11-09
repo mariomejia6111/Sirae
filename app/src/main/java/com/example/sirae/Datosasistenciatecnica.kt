@@ -179,7 +179,7 @@ class Datosasistenciatecnica: AppCompatActivity() {
                 // Manejar el caso en que no se haya seleccionado nada
             }
         }
-        val opcionesActividad = arrayOf("Visita de Asistencia Tecnica Pedagógica", "Reunion con Directores de Distrito", "Reflexion Pedagógica")
+        val opcionesActividad = arrayOf("Visita de Asistencia Técnica Pedagógica", "Reunión con Directores de Distrito", "Reflexión Pedagógica" , "Otra Actividad")
         val adapterActividad = ArrayAdapter(this, android.R.layout.simple_spinner_item, opcionesActividad)
         adapterActividad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 

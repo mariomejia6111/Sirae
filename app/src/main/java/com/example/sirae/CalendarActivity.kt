@@ -118,7 +118,7 @@ class CalendarActivity : AppCompatActivity() {
 
             if (userEmail != null) {
                 // Genera un ID único para el evento
-                val eventId = generateEventId()
+                val eventId = generateEventId(selectedDate ?: "")
 
                 // Crea un objeto Evento con ID único
                 val evento = Event(eventId, selectedDate ?: "", eventDescription)
@@ -146,10 +146,12 @@ class CalendarActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun generateEventId(): Long {
-        val maxId = events.maxByOrNull { it.id }?.id ?: 0
+    private fun generateEventId(selectedDate: String): Long {
+        val eventsForSelectedDate = events.filter { it.date == selectedDate }
+        val maxId = eventsForSelectedDate.maxByOrNull { it.id }?.id ?: 0
         return maxId + 1
     }
+
 
 
     private fun formatDate(year: Int, month: Int, dayOfMonth: Int): String {
